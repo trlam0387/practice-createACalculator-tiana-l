@@ -41,6 +41,18 @@ function customRound(number, decimalPlaces) {
   return Math.round((number + Number.EPSILON) * factor) / factor;
 }
 
+function showSampleCalculations() {
+  const numbers = [3, 78, -12, 0.5, 27];
+
+  console.log(`Absolute value of -45.67: ${absoluteValue(-45.67)}`);
+  console.log(`5 raised to the power of 3: ${power(5, 3)}`);
+  console.log(`Square root of 144: ${squareRoot(144)}`);
+  console.log(`Largest value: ${findMaximum(numbers)}`);
+  console.log(`Smallest value: ${findMinimum(numbers)}`);
+  console.log(`Random integer between 1 and 50: ${randomInteger(1, 50)}`);
+  console.log(`Round 23.67891 to 2 decimal places: ${customRound(23.67891, 2)}`);
+}
+
 function parseNumbers(input) {
   const numbers = input.split(',').map((value) => Number(value.trim()));
   if (numbers.some((number) => Number.isNaN(number))) {
@@ -121,6 +133,7 @@ async function runCalculator() {
 }
 
 if (require.main === module) {
+  showSampleCalculations();
   runCalculator();
 }
 
@@ -132,4 +145,5 @@ module.exports = {
   findMinimum,
   randomInteger,
   customRound,
+  showSampleCalculations,
 };
