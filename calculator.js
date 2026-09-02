@@ -62,21 +62,10 @@ function parseNumbers(input) {
 }
 
 async function runCalculator() {
-  const inputLines = process.stdin.isTTY
-    ? null
-    : (await new Promise((resolve) => {
-        let input = '';
-        process.stdin.setEncoding('utf8');
-        process.stdin.on('data', (chunk) => { input += chunk; });
-        process.stdin.on('end', () => resolve(input.split(/\r?\n/)));
-      }));
-  const interfaceInstance = inputLines ? null : readline.createInterface({
+  const interfaceInstance = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
-  const ask = async (question) => inputLines
-    ? inputLines.shift()
-    : interfaceInstance.question(question);
 
   console.log('\nMath Game Calculator');
   console.log('1. Absolute value');
@@ -87,37 +76,37 @@ async function runCalculator() {
   console.log('6. Custom rounding');
 
   try {
-    const choice = (await ask('Choose an operation (1-6): ')).trim();
+    const choice = (await interfaceInstance.question('Choose an operation (1-6): ')).trim();
     let result;
 
     switch (choice) {
       case '1':
-        result = absoluteValue(Number(await ask('Enter a number: ')));
+        result = absoluteValue(Number(await interfaceInstance.question('Enter a number: ')));
         break;
       case '2':
         result = power(
-          Number(await ask('Enter the base: ')),
-          Number(await ask('Enter the exponent: ')),
+          Number(await interfaceInstance.question('Enter the base: ')),
+          Number(await interfaceInstance.question('Enter the exponent: ')),
         );
         break;
       case '3':
-        result = squareRoot(Number(await ask('Enter a number: ')));
+        result = squareRoot(Number(await interfaceInstance.question('Enter a number: ')));
         break;
       case '4': {
-        const numbers = parseNumbers(await ask('Enter numbers separated by commas: '));
+        const numbers = parseNumbers(await interfaceInstance.question('Enter numbers separated by commas: '));
         result = `Maximum: ${findMaximum(numbers)}\nMinimum: ${findMinimum(numbers)}`;
         break;
       }
       case '5':
         result = randomInteger(
-          Number(await ask('Enter the minimum integer: ')),
-          Number(await ask('Enter the maximum integer: ')),
+          Number(await interfaceInstance.question('Enter the minimum integer: ')),
+          Number(await interfaceInstance.question('Enter the maximum integer: ')),
         );
         break;
       case '6':
         result = customRound(
-          Number(await ask('Enter a number: ')),
-          Number(await ask('Enter decimal places: ')),
+          Number(await interfaceInstance.question('Enter a number: ')),
+          Number(await interfaceInstance.question('Enter decimal places: ')),
         );
         break;
       default:
@@ -128,7 +117,7 @@ async function runCalculator() {
   } catch (error) {
     console.error(`Error: ${error.message}`);
   } finally {
-    interfaceInstance?.close();
+    interfaceInstance.close();
   }
 }
 
